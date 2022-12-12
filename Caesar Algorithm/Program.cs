@@ -10,57 +10,87 @@ namespace Caesar_Algorithm
     internal class Program
     {
         static void Main(string[] args)
-        {
-            Console.WriteLine("Enter to key for offset: ");     
-            int k = int.Parse(Console.ReadLine());          
+        {  
+            Console.WriteLine("Input integer key for offset: ");     
+            int inputKey = int.Parse(Console.ReadLine());   
+            
+            if(inputKey < -51 || inputKey > 51)
+            {
+                throw new Exception("Incorrect key number!!!");
+            }
 
-            Console.WriteLine("Enter to some text for encrypt: ");
-            string text = Console.ReadLine();
+            Console.WriteLine("Input to some text:");
+            string inputText = Console.ReadLine();
+   
+
+            Console.WriteLine("Select the operation:" +
+                "1 - Encrypt, 0 - Decrypt");
+            int operation = int.Parse(Console.ReadLine());
+            if (operation == 0)
+            {
+                Console.WriteLine(Encrypt(inputText, inputKey));
+            }
+            else if(operation == 1)
+            {
+                Console.WriteLine(Decrypt(inputText, inputKey));
+            }
+            else
+            {
+                throw new Exception("Error!");
+            }
+
+        }      
+
+        static public string Encrypt(string text, int key)
+        {
+            const string Alphabet = "ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz";
+            char[] abcd = Alphabet.ToCharArray();
+
             char[] message = text.ToCharArray();
+
+            string result = "";
+            for (int i = 0; i < message.Length; i++)
+            {
+                for (int j = 0; j < abcd.Length; j++)
+                {
+                    if (text[i] == abcd[j])
+                    {
+                        result += message[i] = abcd[(j + key) % 52];
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        static public string Decrypt(string text, int key)
+        {
 
             const string Alphabet = "ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz";
             char[] abcd = Alphabet.ToCharArray();
 
-            int j; 
-            int number;
-            int key;
+            char[] message = text.ToCharArray();
 
+            string result = "";
             for (int i = 0; i < message.Length; i++)
             {
-                for (j = 0; j < abcd.Length; j++)
+                for (int j = 0; j < abcd.Length; j++)
                 {
-                    if (message[i] == abcd[j])
+                    if (text[i] == abcd[j])
                     {
+                        result += message[i] = abcd[(j - key) % 52];
                         break;
                     }
                 }
-
-                if (j != 52)
-                {
-                    number = j;
-
-                    key = number + k;
-
-                    if (key > 51)
-                    {
-                        key = key - 52;
-
-                    }
-
-                    message[i] = abcd[key];
-
-                }
             }
+            
+            return result;
+        }
 
-            Console.WriteLine("Your encrypt text: ");
-            Console.WriteLine(message);
-
-
-           
-
-           
-        }      
-
+        
     }
+
+    
 
 }
